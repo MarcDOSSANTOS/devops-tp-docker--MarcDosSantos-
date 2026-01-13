@@ -56,7 +56,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.18.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:scan
           format: 'sarif'
@@ -64,13 +64,13 @@ jobs:
           severity: 'CRITICAL,HIGH,MEDIUM'
 
       - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
 
       - name: Run Trivy with fail on CRITICAL/HIGH
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.18.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:scan
           exit-code: '1'
@@ -109,7 +109,7 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha,prefix={{branch}}-
+            type=sha,prefix={{branch}}-{{sha}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -131,5 +131,5 @@ jobs:
       - name: Upload SBOM
         uses: actions/upload-artifact@v3
         with:
-          name: sbom
+          name: sbom-${{ github.sha }}
           path: sbom.spdx.json
