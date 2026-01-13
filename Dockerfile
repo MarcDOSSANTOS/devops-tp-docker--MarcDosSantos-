@@ -1,6 +1,9 @@
 # Utiliser une version spécifique (pas latest)
 FROM nginx:1.25.3-alpine
 
+# Pin apk package versions for reproducible builds
+ARG CA_CERTIFICATES_VERSION=20230506-r0
+
 # Métadonnées
 LABEL maintainer="TP DevOps"
 LABEL description="Application DevOps sécurisée"
@@ -12,7 +15,7 @@ RUN addgroup -g 1000 -S appgroup && \
 
 # Installer uniquement les dépendances nécessaires
 RUN apk add --no-cache \
-    ca-certificates \
+    ca-certificates=${CA_CERTIFICATES_VERSION} \
     && rm -rf /var/cache/apk/*
 
 # Copier la configuration Nginx
