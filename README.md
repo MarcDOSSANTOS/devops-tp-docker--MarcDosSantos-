@@ -19,6 +19,7 @@ Ce projet implémente un pipeline CI/CD sécurisé pour Docker avec :
 
 ## Architecture de Sécurité
 
+Code → SAST → Hadolint → Build → Trivy → Security Gates → GHCR
 
 ## Sécurité de l'Image
 
